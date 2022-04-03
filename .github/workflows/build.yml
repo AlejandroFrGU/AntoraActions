@@ -18,6 +18,10 @@ jobs:
       - name: Install dependencies 
         run: npm install
 
+      - name: Install git and rsync 📚
+         run: |
+          apk update && apk add git rsync
+
       - name: Build Antora project 
         run: |
           cp -R node_modules/@antora/lunr-extension/supplemental_ui/* supplemental-ui/ 
@@ -27,3 +31,11 @@ jobs:
         with:
           name: docs 
           path: docs/
+      
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        if: contains(github.ref,'refs/heads/main') 
+        with:
+          branch: gh-pages 
+          folder: docs 
+          clean: true
